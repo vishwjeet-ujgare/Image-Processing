@@ -3,7 +3,7 @@
 **High-Performance Solutions for Image Processing**
 
 ## Project Overview
-ImageMaster is an advanced image processing application designed to provide high-performance solutions for both medical and general image analysis.
+Image Processing / ImageMaster is an advanced image processing application designed to provide high-performance solutions for both medical and general image analysis.
 Leveraging the power of CUDA for parallel processing and C for serial processing, ImageMaster efficiently handles large image datasets such as CT
  scans and MRIs, ensuring optimized performance and accuracy.
 
