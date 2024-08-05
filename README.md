@@ -1,12 +1,15 @@
 ```markdown
-# Image Processing
+### Image Processing
 **High-Performance Solutions for Image Processing**
 
 ## Project Overview
-ImageMaster is an advanced image processing application designed to provide high-performance solutions for both medical and general image analysis. Leveraging the power of CUDA for parallel processing and C for serial processing, ImageMaster efficiently handles large image datasets such as CT scans and MRIs, ensuring optimized performance and accuracy.
+ImageMaster is an advanced image processing application designed to provide high-performance solutions for both medical and general image analysis.
+Leveraging the power of CUDA for parallel processing and C for serial processing, ImageMaster efficiently handles large image datasets such as CT
+ scans and MRIs, ensuring optimized performance and accuracy.
 
 ## Project Objectives
-- **Develop 10 Image Processing Functionalities:** Implement diverse tasks including noise reduction, contrast enhancement, sharpness enhancement, edge detection, gamma correction, histogram equalization, brightness adjustment, color correction, adaptive filtering, and image resizing and scaling.
+- **Develop 10 Image Processing Functionalities:** Implement diverse tasks including noise reduction, contrast enhancement, sharpness enhancement,
+edge detection, gamma correction, histogram equalization, brightness adjustment, color correction, adaptive filtering, and image resizing and scaling.
 - **Serial and Parallel Versions:** Provide both serial (C) and parallel (CUDA) implementations for each functionality to compare performance and efficiency.
 - **Parameter Customization:** Allow users to manually set parameters or use default settings for each image processing task.
 - **Optimized Hardware Utilization:** Enable the application to effectively utilize CPU, GPU, or both, maximizing performance based on available hardware.
@@ -80,20 +83,41 @@ ImageMaster/
 - **Pull Requests:** Ensure PRs have a clear title and description, link relevant issues, assign reviewers, and provide constructive feedback during code reviews.
 - **Documentation:** Update the main `README.md` with an overview and usage instructions, and ensure each functionality has its own detailed `README.md`.
 
-## Getting Started
-1. **Clone the Repository:**
+
+## Steps for Team Members
+
+1. **Clone the Repository**
+   Each team member should clone the repository to their local machine.
    ```bash
    git clone https://github.com/yourusername/ImageMaster.git
    ```
-2. **Create a Branch:**
+
+2. **Create Branches for Individual Work**
+   Each team member should create a branch for their specific functionality.
    ```bash
    git checkout -b feature-functionality_name
    ```
-3. **Build and Run:**
-   Follow the instructions in the `README.md` for building and running the application.
 
-## License
-This project is licensed under the [MIT License](LICENSE).
+3. **Follow the Directory Structure**
+   Each team member should create and work within their respective directories following the standard structure outlined earlier.
+
+4. **Commit and Push Changes**
+   Regularly commit changes with clear, descriptive commit messages.
+   ```bash
+   git add .
+   git commit -m "Implemented serial version of brightness adjustment"
+   git push origin feature-functionality_name
+   ```
+
+5. **Create Pull Requests**
+   When a functionality is ready for review, team members should create a pull request (PR) from their feature branch to the main branch.
+   1. Go to the repository on GitHub.
+   2. Click on **Pull requests**.
+   3. Click on **New pull request**.
+   4. Select the base branch (main) and the compare branch (feature-functionality_name).
+   5. Add a descriptive title and detailed description of the changes.
+   6. Assign reviewers if needed and create the pull request.
+
 
 ## Contact
 For any questions or inquiries, please contact the project lead:
