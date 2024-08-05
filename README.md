@@ -28,7 +28,7 @@ edge detection, gamma correction, histogram equalization, brightness adjustment,
 
 ## Technology Stack
 - **Programming Languages:** C, CUDA
-- **Development Tools:** GCC, NVCC, CMake
+- **Development Tools:** GCC, NVCC,
 - **Version Control:** Git, GitHub
 
 ## Repository Structure
