@@ -1,5 +1,5 @@
 
-### Image Processing
+# Image Processing
 **High-Performance Solutions for Image Processing**
 
 ## Project Overview
@@ -75,7 +75,7 @@ ImageMaster/
 ├── LICENSE
 ├── .gitignore
 └── CMakeLists.txt
-
+'''
 
 ## Contribution Guidelines
 - **Branching Strategy:** Use feature branches for new functionalities (`feature-functionality_name`) and bugfix branches for fixes (`bugfix-description`).
@@ -89,7 +89,7 @@ ImageMaster/
 1. **Clone the Repository**
    Each team member should clone the repository to their local machine.
    ```bash
-   git clone https://github.com/yourusername/ImageMaster.git
+   git clone https://github.com/yourusername/Image-Processing.git
    ```
 
 2. **Create Branches for Individual Work**
