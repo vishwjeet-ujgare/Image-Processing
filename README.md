@@ -1,4 +1,4 @@
-```markdown
+
 ### Image Processing
 **High-Performance Solutions for Image Processing**
 
@@ -75,7 +75,7 @@ ImageMaster/
 ├── LICENSE
 ├── .gitignore
 └── CMakeLists.txt
-```
+
 
 ## Contribution Guidelines
 - **Branching Strategy:** Use feature branches for new functionalities (`feature-functionality_name`) and bugfix branches for fixes (`bugfix-description`).
