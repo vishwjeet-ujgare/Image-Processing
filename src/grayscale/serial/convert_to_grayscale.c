@@ -27,6 +27,7 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
     jpeg_stdio_src(&cinfo, inputFile);
 
     // Read the JPEG header
+    
     jpeg_read_header(&cinfo, TRUE);
 
     // Start decompression
