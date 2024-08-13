@@ -5,7 +5,48 @@
 #include <omp.h>
 #include <time.h> // For measuring time
 
-void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
+#define MAX_PATH 2000
+#define DEFAULT_OUTPUT_DIR "/home/hpcap/Desktop/image_process/Image-Processing/data/output/cuda_processed_img/grayscale/"
+
+// Function to extract base filename from the input path
+void extractBaseFileName(const char *inputFilePath, char *baseFileName, size_t baseFileNameSize)
+{
+    const char *baseName = strrchr(inputFilePath, '/');
+    if (baseName)
+    {
+        baseName++; // Skip the '/'
+        snprintf(baseFileName, baseFileNameSize, "%s", baseName);
+    }
+    else
+    {
+        snprintf(baseFileName, baseFileNameSize, "%s", inputFilePath);
+    }
+    // Remove the file extension if present
+    char *dot = strrchr(baseFileName, '.');
+    if (dot)
+    {
+        *dot = '\0';
+    }
+}
+
+// Function to construct the output file path
+void constructOutputPath(char *outputFilePath, size_t outputFilePathSize, const char *outputDir, const char *baseFileName)
+{
+    size_t dirLen = strlen(outputDir);
+    size_t baseNameLen = strlen(baseFileName);
+    size_t suffixLen = strlen("_openmp_processed.jpg");
+
+    if (dirLen + baseNameLen + suffixLen + 1 >= outputFilePathSize)
+    {
+        fprintf(stderr, "Error: Path length exceeds buffer size\n");
+        exit(EXIT_FAILURE);
+    }
+
+    snprintf(outputFilePath, outputFilePathSize, "%s%s_openmp_processed.jpg", outputDir, baseFileName);
+}
+
+void convertToGrayscale(const char *inputFilePath, const char *outputFilePath)
+{
     struct jpeg_decompress_struct cinfo;
     struct jpeg_compress_struct cinfo_out;
     struct jpeg_error_mgr jerr;
@@ -18,7 +59,8 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
     double start = omp_get_wtime();
 
     // Open the input file
-    if ((inputFile = fopen(inputFilePath, "rb")) == NULL) {
+    if ((inputFile = fopen(inputFilePath, "rb")) == NULL)
+    {
         fprintf(stderr, "Error opening input file: %s\n", inputFilePath);
         perror("fopen");
         exit(EXIT_FAILURE);
@@ -47,7 +89,8 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
     jpeg_create_compress(&cinfo_out);
 
     // Open the output file
-    if ((outputFile = fopen(outputFilePath, "wb")) == NULL) {
+    if ((outputFile = fopen(outputFilePath, "wb")) == NULL)
+    {
         fprintf(stderr, "Error opening output file: %s\n", outputFilePath);
         perror("fopen");
         exit(EXIT_FAILURE);
@@ -57,7 +100,7 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
 
     cinfo_out.image_width = cinfo.output_width;
     cinfo_out.image_height = cinfo.output_height;
-    cinfo_out.input_components = 1;  // Grayscale output
+    cinfo_out.input_components = 1; // Grayscale output
     cinfo_out.in_color_space = JCS_GRAYSCALE;
 
     jpeg_set_defaults(&cinfo_out);
@@ -65,12 +108,14 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
     jpeg_start_compress(&cinfo_out, TRUE);
 
     // Process each scanline
-    while (cinfo.output_scanline < cinfo.output_height) {
+    while (cinfo.output_scanline < cinfo.output_height)
+    {
         jpeg_read_scanlines(&cinfo, buffer, 1);
 
-        // Convert each pixel to grayscale using OpenMP
-        #pragma omp parallel for
-        for (int i = 0; i < cinfo.output_width; ++i) {
+// Convert each pixel to grayscale using OpenMP
+#pragma omp parallel for
+        for (int i = 0; i < cinfo.output_width; ++i)
+        {
             unsigned char r = buffer[0][i * 3];
             unsigned char g = buffer[0][i * 3 + 1];
             unsigned char b = buffer[0][i * 3 + 2];
@@ -94,30 +139,40 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
     // End timing
     double end = omp_get_wtime();
     double time_taken = end - start;
+    printf("------------------------------------------------------------\n");
     printf("Grayscale image saved successfully to %s.\n", outputFilePath);
+    printf("------------------------------------------------------------\n");
+
     printf("Time taken: %.2f seconds\n", time_taken);
 }
 
-int main() {
-    char inputFilePath[256], outputFilePath[256];
+int main(int argc, char *argv[])
+{
+    char inputFilePath[256];
+    char outputDir[256] = DEFAULT_OUTPUT_DIR;
+    char outputFilePath[MAX_PATH];
+    char baseFileName[256];
 
-    // Ask for the input image path
-    printf("Enter the full path for the input image (e.g., /home/user/image.jpg): ");
-    if (fgets(inputFilePath, sizeof(inputFilePath), stdin) == NULL) {
-        fprintf(stderr, "Error reading input path.\n");
+    if (argc < 2 || argc > 3)
+    {
+        fprintf(stderr, "Usage: %s <input_image_path> [output_directory]\n", argv[0]);
         return EXIT_FAILURE;
     }
-    // Remove newline character from fgets
-    inputFilePath[strcspn(inputFilePath, "\n")] = '\0';
 
-    // Ask for the output image path
-    printf("Enter the full path for the output image (e.g., /home/user/output.jpg): ");
-    if (fgets(outputFilePath, sizeof(outputFilePath), stdin) == NULL) {
-        fprintf(stderr, "Error reading output path.\n");
-        return EXIT_FAILURE;
+    // Get the input image path from command-line argument
+    snprintf(inputFilePath, sizeof(inputFilePath), "%s", argv[1]);
+
+    // Get the output directory from command-line argument if provided
+    if (argc == 3)
+    {
+        snprintf(outputDir, sizeof(outputDir), "%s", argv[2]);
     }
-    // Remove newline character from fgets
-    outputFilePath[strcspn(outputFilePath, "\n")] = '\0';
+
+    // Extract base filename from the input path
+    extractBaseFileName(inputFilePath, baseFileName, sizeof(baseFileName));
+
+    // Construct the output file path
+    constructOutputPath(outputFilePath, sizeof(outputFilePath), outputDir, baseFileName);
 
     // Convert the image to grayscale
     convertToGrayscale(inputFilePath, outputFilePath);

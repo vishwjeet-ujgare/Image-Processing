@@ -2,8 +2,13 @@
 #include <stdlib.h>
 #include <jpeglib.h>
 #include <string.h>
+#include <time.h>   // Include time.h for clock()
+#include <libgen.h> // For basename()
 
-void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
+#define MAX_PATH_LENGTH 512 // Increased buffer size
+
+void convertToGrayscale(const char *inputFilePath, const char *outputFilePath)
+{
     struct jpeg_decompress_struct cinfo;
     struct jpeg_compress_struct cinfo_out;
     struct jpeg_error_mgr jerr;
@@ -13,7 +18,8 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
     int row_stride;
 
     // Open the input file
-    if ((inputFile = fopen(inputFilePath, "rb")) == NULL) {
+    if ((inputFile = fopen(inputFilePath, "rb")) == NULL)
+    {
         fprintf(stderr, "Error opening input file: %s\n", inputFilePath);
         perror("fopen"); // Detailed error message
         exit(EXIT_FAILURE);
@@ -27,7 +33,6 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
     jpeg_stdio_src(&cinfo, inputFile);
 
     // Read the JPEG header
-    
     jpeg_read_header(&cinfo, TRUE);
 
     // Start decompression
@@ -43,7 +48,8 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
     jpeg_create_compress(&cinfo_out);
 
     // Open the output file
-    if ((outputFile = fopen(outputFilePath, "wb")) == NULL) {
+    if ((outputFile = fopen(outputFilePath, "wb")) == NULL)
+    {
         fprintf(stderr, "Error opening output file: %s\n", outputFilePath);
         perror("fopen"); // Detailed error message
         exit(EXIT_FAILURE);
@@ -53,18 +59,20 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
 
     cinfo_out.image_width = cinfo.output_width;
     cinfo_out.image_height = cinfo.output_height;
-    cinfo_out.input_components = 1;  // Grayscale output
+    cinfo_out.input_components = 1; // Grayscale output
     cinfo_out.in_color_space = JCS_GRAYSCALE;
 
     jpeg_set_defaults(&cinfo_out);
     jpeg_start_compress(&cinfo_out, TRUE);
 
     // Process each scanline
-    while (cinfo.output_scanline < cinfo.output_height) {
+    while (cinfo.output_scanline < cinfo.output_height)
+    {
         jpeg_read_scanlines(&cinfo, buffer, 1);
 
         // Convert each pixel to grayscale
-        for (int i = 0; i < row_stride; i += 3) {
+        for (int i = 0; i < row_stride; i += 3)
+        {
             unsigned char gray = (unsigned char)(0.299 * buffer[0][i] +
                                                  0.587 * buffer[0][i + 1] +
                                                  0.114 * buffer[0][i + 2]);
@@ -85,31 +93,80 @@ void convertToGrayscale(const char *inputFilePath, const char *outputFilePath) {
     fclose(outputFile);
 }
 
-int main() {
-    char inputFilePath[256], outputFilePath[256];
+int main(int argc, char *argv[])
+{
+    char outputFilePath[MAX_PATH_LENGTH];
+    const char *inputFilePath;
 
-    // Ask for the input image path
-    printf("Enter the full path for the input image (e.g., /home/user/image.jpg): ");
-    if (fgets(inputFilePath, sizeof(inputFilePath), stdin) == NULL) {
-        fprintf(stderr, "Error reading input path.\n");
+    // Ensure an input file path is passed as a command-line argument
+    if (argc < 2)
+    {
+        fprintf(stderr, "Usage: %s <input_file_path>\n", argv[0]);
         return EXIT_FAILURE;
     }
-    // Remove newline character from fgets
-    inputFilePath[strcspn(inputFilePath, "\n")] = '\0';
+
+    // Get the input file path from the command-line argument
+    inputFilePath = argv[1];
 
     // Ask for the output image path
-    printf("Enter the full path for the output image (e.g., /home/user/output.jpg): ");
-    if (fgets(outputFilePath, sizeof(outputFilePath), stdin) == NULL) {
-        fprintf(stderr, "Error reading output path.\n");
+    printf("Enter the full path for the output image (or press Enter for default): ");
+    if (fgets(outputFilePath, sizeof(outputFilePath), stdin) != NULL)
+    {
+        // Remove newline character from fgets
+        outputFilePath[strcspn(outputFilePath, "\n")] = '\0';
+    }
+
+    // Extract the base name from the input file path
+    char inputFileName[256];
+    strcpy(inputFileName, basename((char *)inputFilePath)); // Extract "image.jpg" from "/path/image.jpg"
+
+    // Remove the extension from the base name
+    char baseName[256];
+    strcpy(baseName, inputFileName);
+    char *dot = strrchr(baseName, '.');
+    if (dot)
+        *dot = '\0'; // "image" from "image.jpg"
+
+    // Append "_serial.jpg" to the base name
+    strcat(baseName, "_serial.jpg");
+
+    // Use default output path if the user does not provide one
+    if (strlen(outputFilePath) == 0)
+    {
+        snprintf(outputFilePath, sizeof(outputFilePath),
+                 "/home/hpcap/Desktop/image_process/Image-Processing/data/output/cuda_processed_img/grayscale/c/%s", baseName);
+    }
+    else if (outputFilePath[strlen(outputFilePath) - 1] == '/')
+    {
+        // User provided only a folder path, append the generated file name
+        snprintf(outputFilePath + strlen(outputFilePath), sizeof(outputFilePath) - strlen(outputFilePath), "%s", baseName);
+    }
+
+    // Ensure the path does not exceed buffer size
+    if (strlen(outputFilePath) >= MAX_PATH_LENGTH)
+    {
+        fprintf(stderr, "Error: Output file path is too long.\n");
         return EXIT_FAILURE;
     }
-    // Remove newline character from fgets
-    outputFilePath[strcspn(outputFilePath, "\n")] = '\0';
+
+    // Measure start time
+    clock_t start_time = clock();
 
     // Convert the image to grayscale
     convertToGrayscale(inputFilePath, outputFilePath);
 
-    printf("Grayscale image saved successfully to %s.\n", outputFilePath);
+    // Measure end time
+    clock_t end_time = clock();
+
+    // Calculate the time taken in seconds
+    double time_taken = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("-----------------------------------------------------------");
+    printf("\nGrayscale image saved successfully to %s.\n", outputFilePath);
+    printf("-----------------------------------------------------------\n");
+
+    printf("Time taken for conversion: %.2f seconds\n", time_taken);
+    printf("-----------------------------------------------------------\n");
+
 
     return EXIT_SUCCESS;
 }

@@ -1,0 +1,7 @@
+/home/hpcap/Desktop/image_process/Image-Processing/data/input/image1.jpg
+
+
+
+
+For OpenMp
+gcc -o convert_to_grayscale convert_to_grayscale.c -ljpeg -fopenmp
