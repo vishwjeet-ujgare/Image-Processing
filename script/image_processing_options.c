@@ -98,29 +98,6 @@ void start_image_processing()
         switch (choice)
         {
         case 1:
-            // clear_screen();
-            // display_title();
-            // printf("Current Image Path: %s\n", image_path);
-            // printf("-----------------------------------\n");
-            // printf("Processing Grayscale Conversion...\n");
-            // printf(".\n");
-            // printf(".\n");
-            // printf(".\n");
-            // // Ensure correct command format with space between executable and image path
-            // char command[MAX_PATH_LENGTH + 200];
-            // snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/grayscale/serial/convert_to_grayscale \"%s\"", image_path);
-            // printf("********************************************************\n");
-            // int result = system(command); // Call the grayscale program
-
-            // if (result != 0)
-            // {
-            //     printf("Error: Grayscale Conversion failed.\n");
-            // }
-            // else
-            // {
-            //     printf("Grayscale Conversion completed successfully!\n");
-            // }
-            // break;
 
             int sub_choice;
             do
@@ -169,72 +146,122 @@ void start_image_processing()
                 printf("Press Enter to continue...");
                 getchar(); // Wait for user to press Enter before showing the menu again
             } while (sub_choice != 4); // Continue loop until user chooses to go back
-        break;
+            break;
 
-    case 2:
-        clear_screen();
-        display_title();
-        printf("Current Image Path: %s\n", image_path);
-        printf("Processing Intensity Normalization...\n");
-        // Call the Intensity Normalization function with the image path
-        // normalize_intensity(image_path); // Ensure this function matches your implementation
-        printf("Intensity Normalization completed successfully!\n");
-        break;
-    case 3:
-        clear_screen();
-        display_title();
-        printf("Current Image Path: %s\n", image_path);
-        printf("Processing Edge Detection...\n");
-        // Call the Edge Detection function with the image path
-        // edge_detection(image_path); // Ensure this function matches your implementation
-        printf("Edge Detection completed successfully!\n");
-        break;
-    case 4:
-        clear_screen();
-        display_title();
-        printf("Current Image Path: %s\n", image_path);
-        printf("Processing Histogram Equalization...\n");
-        // Call the Histogram Equalization function with the image path
-        // histogram_equalization(image_path); // Ensure this function matches your implementation
-        printf("Histogram Equalization completed successfully!\n");
-        break;
-    case 5:
-        clear_screen();
-        display_title();
-        printf("Current Image Path: %s\n", image_path);
-        printf("Processing Gaussian Blur...\n");
-        // Call the Gaussian Blur function with the image path
-        // gaussian_blur(image_path); // Ensure this function matches your implementation
-        printf("Gaussian Blur completed successfully!\n");
-        break;
-    case 6:
-        clear_screen();
-        display_title();
-        printf("Current Image Path: %s\n", image_path);
-        printf("Processing Denoising...\n");
-        // Call the Denoising function with the image path
-        // denoise_image(image_path); // Ensure this function matches your implementation
-        printf("Denoising completed successfully!\n");
-        break;
-    case 7:
-        select_another_image = 1; // Set flag to select another image
-        break;
-    case 8:
-        return; // Go back to main menu
-    default:
-        printf("Invalid choice. Please select a valid functionality.\n");
-        break;
-    }
+        case 2:
+            clear_screen();
+            display_title();
+            printf("Current Image Path: %s\n", image_path);
+            printf("Processing Intensity Normalization...\n");
+            // Call the Intensity Normalization function with the image path
+            // normalize_intensity(image_path); // Ensure this function matches your implementation
+            printf("Intensity Normalization completed successfully!\n");
+            break;
+        case 3: // Edge Detection
+            clear_screen();
+            display_title();
+            printf("Current Image Path: %s\n", image_path);
+            printf("Select the code to execute for Edge Detection:\n");
+            printf("1. C (Serial)\n");
+            printf("2. OpenMP (Multi-Core)\n");
+            printf("3. CUDA (GPU-Parallel)\n");
+            printf("4. Back to Functionalities Menu\n");
+            printf("********************************************************\n");
 
-    if (choice != 7)
-    {
-        // If not selecting another image, print the image path again before returning to the menu
-        printf("Current Image Path: %s\n", image_path);
-    }
+            int edge_detection_choice;
+            scanf("%d", &edge_detection_choice);
 
-    printf("Press Enter to return to the menu...");
-    getchar(); // Wait for user to press Enter
-}
-while (1)
-    ; // Repeat indefinitely
+            // Clear the newline character left by scanf from the input buffer
+            while (getchar() != '\n')
+                ;
+
+            switch (edge_detection_choice)
+            {
+            case 1: // C (Serial)
+                clear_screen();
+                display_title();
+                printf("Current Image Path: %s\n", image_path);
+                printf("Processing Edge Detection with C (Serial)...\n");
+                snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/edge_detection/c/c_edge_detection \"%s\"", image_path);
+                printf("Executing C (Serial) Edge Detection...\n");
+                execute_command(command);
+                break;
+
+            case 2: // OpenMP (Multi-Core)
+                clear_screen();
+                display_title();
+                printf("Current Image Path: %s\n", image_path);
+                printf("Processing Edge Detection with OpenMP (Multi-Core)...\n");
+                snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/edge_detection/openmp/openmp_edge_detection \"%s\"", image_path);
+                printf("Executing OpenMP (Multi-Core) Edge Detection...\n");
+                execute_command(command);
+                break;
+
+            case 3: // CUDA (GPU-Parallel)
+                clear_screen();
+                display_title();
+                printf("Current Image Path: %s\n", image_path);
+                printf("Processing Edge Detection with CUDA (GPU-Parallel)...\n");
+                snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/edge_detection/cuda/a.out \"%s\"", image_path);
+                printf("Executing CUDA (GPU-Parallel) Edge Detection...\n");
+                execute_command(command);
+                break;
+
+            case 4:     // Back to Functionalities Menu
+                return; // Exit the function to go back to the functionalities menu
+
+            default:
+                printf("Invalid choice. Please select a valid option (1-4).\n");
+                break;
+            }
+
+            printf("Edge Detection completed successfully!\n");
+            break;
+
+        case 4:
+            clear_screen();
+            display_title();
+            printf("Current Image Path: %s\n", image_path);
+            printf("Processing Histogram Equalization...\n");
+            // Call the Histogram Equalization function with the image path
+            // histogram_equalization(image_path); // Ensure this function matches your implementation
+            printf("Histogram Equalization completed successfully!\n");
+            break;
+        case 5:
+            clear_screen();
+            display_title();
+            printf("Current Image Path: %s\n", image_path);
+            printf("Processing Gaussian Blur...\n");
+            // Call the Gaussian Blur function with the image path
+            // gaussian_blur(image_path); // Ensure this function matches your implementation
+            printf("Gaussian Blur completed successfully!\n");
+            break;
+        case 6:
+            clear_screen();
+            display_title();
+            printf("Current Image Path: %s\n", image_path);
+            printf("Processing Denoising...\n");
+            // Call the Denoising function with the image path
+            // denoise_image(image_path); // Ensure this function matches your implementation
+            printf("Denoising completed successfully!\n");
+            break;
+        case 7:
+            select_another_image = 1; // Set flag to select another image
+            break;
+        case 8:
+            return; // Go back to main menu
+        default:
+            printf("Invalid choice. Please select a valid functionality.\n");
+            break;
+        }
+
+        if (choice != 7)
+        {
+            // If not selecting another image, print the image path again before returning to the menu
+            printf("Current Image Path: %s\n", image_path);
+        }
+
+        printf("Press Enter to return to the menu...");
+        getchar(); // Wait for user to press Enter
+    } while (1); // Repeat indefinitely
 }
