@@ -5,8 +5,9 @@
 #include <string.h>  // Include this for memcpy
 #include <time.h>    // Include this for clock()
 
-#define INPUT_IMAGE "input_image.jpg"
-#define OUTPUT_IMAGE "output_image.jpg"
+
+#define INPUT_IMAGE "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/cuda/input_image.jpg"
+#define OUTPUT_IMAGE "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/openmp/output_image.jpg"
 #define KERNEL_WIDTH 21
 
 // Function prototypes

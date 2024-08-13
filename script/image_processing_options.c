@@ -227,15 +227,60 @@ void start_image_processing()
             // histogram_equalization(image_path); // Ensure this function matches your implementation
             printf("Histogram Equalization completed successfully!\n");
             break;
-        case 5:
-            clear_screen();
-            display_title();
-            printf("Current Image Path: %s\n", image_path);
-            printf("Processing Gaussian Blur...\n");
-            // Call the Gaussian Blur function with the image path
-            // gaussian_blur(image_path); // Ensure this function matches your implementation
-            printf("Gaussian Blur completed successfully!\n");
+        case 5: // Gaussian Blur
+            while (1)
+            {
+                clear_screen();
+                display_title();
+                printf("Current Image Path: %s\n", image_path);
+                printf("-----------------------------------\n");
+                printf("Select Gaussian Blur Implementation:\n");
+                printf("1. C (Serial)\n");
+                printf("2. CUDA (GPU-Parallel)\n");
+                printf("3. OpenMP (Multi-Core)\n");
+                printf("4. Back to Functionalities Menu\n");
+                printf("********************************************************\n");
+                printf("Enter your choice (1-4): ");
+                scanf("%d", &choice);
+
+                // Clear the newline character left by scanf from the input buffer
+                while (getchar() != '\n')
+                    ;
+
+                switch (choice)
+                {
+                case 1: // C (Serial)
+                    snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/c/sequenctial_gaussian_blur \"%s\"", image_path);
+                    printf("Executing C (Serial) Gaussian Blur...\n");
+                    execute_command(command);
+                    break;
+
+                case 2: // CUDA (GPU-Parallel)
+                    snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/cuda/gaussian_blur_cuda \"%s\"", image_path);
+                    printf("Executing CUDA (GPU-Parallel) Gaussian Blur...\n");
+                    execute_command(command);
+                    break;
+
+                case 3: // OpenMP (Multi-Core)
+                    snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/openmp/gaussian_blur_openmp \"%s\"", image_path);
+                    printf("Executing OpenMP (Multi-Core) Gaussian Blur...\n");
+                    execute_command(command);
+                    break;
+
+                case 4:     // Back to Functionalities Menu
+                    return; // Exit the function to go back to the functionalities menu
+
+                default:
+                    printf("Invalid choice. Please select a valid option (1-4).\n");
+                    break;
+                }
+
+                printf("Gaussian Blur processing completed successfully!\n");
+                printf("Press Enter to return to the Gaussian Blur menu...");
+                getchar(); // Wait for the user to press Enter before showing the menu again
+            }
             break;
+
         case 6:
             clear_screen();
             display_title();
