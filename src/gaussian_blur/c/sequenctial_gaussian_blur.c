@@ -7,7 +7,8 @@
 
 
 #define INPUT_IMAGE "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/cuda/input_image.jpg"
-#define OUTPUT_IMAGE "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/openmp/output_image.jpg"
+
+#define OUTPUT_IMAGE "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/c/c_output_image.jpg"
 #define KERNEL_WIDTH 21
 
 // Function prototypes
