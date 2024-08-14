@@ -17,6 +17,10 @@ void execute_command(const char *command)
     {
         printf("Error: Command execution failed with result code %d.\n", result);
     }
+    else
+    {
+        printf("Histogram Equalization completed successfully!\n");
+    }
 }
 
 void start_image_processing()
@@ -118,19 +122,19 @@ void start_image_processing()
                 switch (sub_choice)
                 {
                 case 1: // C (Serial)
-                    snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/grayscale/serial/convert_to_grayscale \"%s\"", image_path);
+                    snprintf(command, sizeof(command), "../src/grayscale/serial/convert_to_grayscale \"%s\"", image_path);
                     printf("Executing C (Serial) Grayscale Conversion...\n");
                     execute_command(command);
                     break;
 
                 case 2: // CUDA (GPU-Parallel)
-                    snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/grayscale/cuda/a.out \"%s\"", image_path);
+                    snprintf(command, sizeof(command), "../src/grayscale/cuda/a.out \"%s\"", image_path);
                     printf("Executing CUDA (GPU-Parallel) Grayscale Conversion...\n");
                     execute_command(command);
                     break;
 
                 case 3: // OpenMP (Multi-Core)
-                    snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/grayscale/openMP/openMP_convert_to_grayscale \"%s\"", image_path);
+                    snprintf(command, sizeof(command), "../src/grayscale/openMP/openMP_convert_to_grayscale \"%s\"", image_path);
                     printf("Executing OpenMP (Multi-Core) Grayscale Conversion...\n");
                     execute_command(command);
                     break;
@@ -182,7 +186,7 @@ void start_image_processing()
                 display_title();
                 printf("Current Image Path: %s\n", image_path);
                 printf("Processing Edge Detection with C (Serial)...\n");
-                snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/edge_detection/c/c_edge_detection \"%s\"", image_path);
+                snprintf(command, sizeof(command), "../src/edge_detection/c/c_edge_detection \"%s\"", image_path);
                 printf("Executing C (Serial) Edge Detection...\n");
                 execute_command(command);
                 break;
@@ -192,7 +196,7 @@ void start_image_processing()
                 display_title();
                 printf("Current Image Path: %s\n", image_path);
                 printf("Processing Edge Detection with OpenMP (Multi-Core)...\n");
-                snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/edge_detection/openmp/openmp_edge_detection \"%s\"", image_path);
+                snprintf(command, sizeof(command), "../src/edge_detection/openmp/openmp_edge_detection \"%s\"", image_path);
                 printf("Executing OpenMP (Multi-Core) Edge Detection...\n");
                 execute_command(command);
                 break;
@@ -202,7 +206,8 @@ void start_image_processing()
                 display_title();
                 printf("Current Image Path: %s\n", image_path);
                 printf("Processing Edge Detection with CUDA (GPU-Parallel)...\n");
-                snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/edge_detection/cuda/a.out \"%s\"", image_path);
+
+                snprintf(command, sizeof(command), "../src/edge_detection/cuda/a.out \"%s\"", image_path);
                 printf("Executing CUDA (GPU-Parallel) Edge Detection...\n");
                 execute_command(command);
                 break;
@@ -218,15 +223,60 @@ void start_image_processing()
             printf("Edge Detection completed successfully!\n");
             break;
 
-        case 4:
-            clear_screen();
-            display_title();
-            printf("Current Image Path: %s\n", image_path);
-            printf("Processing Histogram Equalization...\n");
-            // Call the Histogram Equalization function with the image path
-            // histogram_equalization(image_path); // Ensure this function matches your implementation
-            printf("Histogram Equalization completed successfully!\n");
-            break;
+            case 4: // histogram_equalization
+                while (1)
+                {
+                    clear_screen();
+                    display_title();
+                    printf("Current Image Path: %s\n", image_path);
+                    printf("-------------------------------------------\n");
+                    printf("Select Histogram Equalization Implementation:\n");
+                    printf("1. C (Serial)\n");
+                    printf("2. CUDA (GPU-Parallel)\n");
+                    printf("3. OpenMP (Multi-Core)\n");
+                    printf("4. Back to Functionalities Menu\n");
+                    printf("********************************************************\n");
+                    printf("Enter your choice (1-4): ");
+                    scanf("%d", &choice);
+
+                    // Clear the newline character left by scanf from the input buffer
+                    while (getchar() != '\n')
+                        ;
+
+                    switch (choice)
+                    {
+                    case 1: // C (Serial)
+                        snprintf(command, sizeof(command), "../src/histrogram/c/c_histrogram \"%s\"", image_path);
+                        printf("Executing C (Serial) Histogram Equalization...\n");
+                        execute_command(command);
+                        break;
+
+                    case 2: // CUDA (GPU-Parallel)
+                        snprintf(command, sizeof(command), "../src/histogram_equalization/cuda/histogram_equalization_cuda \"%s\"", image_path);
+                        printf("Executing CUDA (GPU-Parallel) Histogram Equalization...\n");
+                        execute_command(command);
+                        break;
+
+                    case 3: // OpenMP (Multi-Core)
+                        snprintf(command, sizeof(command), "../src/histrogram/openmp/openmp_histrogram \"%s\"", image_path);
+                        printf("Executing OpenMP (Multi-Core) Histogram Equalization...\n");
+                        execute_command(command);
+                        break;
+
+                    case 4:     // Back to Functionalities Menu
+                        return; // Exit the function to go back to the functionalities menu
+
+                    default:
+                        printf("Invalid choice. Please select a valid option (1-4).\n");
+                        break;
+                    }
+
+                    printf("Histogram Equalization processing completed successfully!\n");
+                    printf("Press Enter to return to the Histogram Equalization menu...");
+                    getchar(); // Wait for the user to press Enter before showing the menu again
+                }
+
+                break;
         case 5: // Gaussian Blur
             while (1)
             {
@@ -250,19 +300,19 @@ void start_image_processing()
                 switch (choice)
                 {
                 case 1: // C (Serial)
-                    snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/c/sequenctial_gaussian_blur \"%s\"", image_path);
+                    snprintf(command, sizeof(command), "../src/gaussian_blur/c/sequenctial_gaussian_blur \"%s\"", image_path);
                     printf("Executing C (Serial) Gaussian Blur...\n");
                     execute_command(command);
                     break;
 
                 case 2: // CUDA (GPU-Parallel)
-                    snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/cuda/gaussian_blur_cuda \"%s\"", image_path);
+                    snprintf(command, sizeof(command), "../src/gaussian_blur/cuda/gaussian_blur_cuda \"%s\"", image_path);
                     printf("Executing CUDA (GPU-Parallel) Gaussian Blur...\n");
                     execute_command(command);
                     break;
 
                 case 3: // OpenMP (Multi-Core)
-                    snprintf(command, sizeof(command), "/home/hpcap/Desktop/image_process/Image-Processing/src/gaussian_blur/openmp/gaussian_blur_openmp \"%s\"", image_path);
+                    snprintf(command, sizeof(command), "../src/gaussian_blur/openmp/gaussian_blur_openmp \"%s\"", image_path);
                     printf("Executing OpenMP (Multi-Core) Gaussian Blur...\n");
                     execute_command(command);
                     break;

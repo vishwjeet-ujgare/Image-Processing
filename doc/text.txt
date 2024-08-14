@@ -5,3 +5,5 @@
 
 For OpenMp
 gcc -o convert_to_grayscale convert_to_grayscale.c -ljpeg -fopenmp
+
+gcc main_script.c about.c functionalities.c title.c image_processing_options.c -o main_script
