@@ -153,13 +153,57 @@ void start_image_processing()
             break;
 
         case 2:
-            clear_screen();
-            display_title();
-            printf("Current Image Path: %s\n", image_path);
-            printf("Processing Intensity Normalization...\n");
-            // Call the Intensity Normalization function with the image path
-            // normalize_intensity(image_path); // Ensure this function matches your implementation
-            printf("Intensity Normalization completed successfully!\n");
+            while (1)
+            {
+                clear_screen();
+                display_title();
+                printf("Current Image Path: %s\n", image_path);
+                printf("-------------------------------------------\n");
+                printf("Select Intensity Normalization Implementation:\n");
+                printf("1. C (Serial)\n");
+                printf("2. CUDA (GPU-Parallel)\n");
+                printf("3. OpenMP (Multi-Core)\n");
+                printf("4. Back to Functionalities Menu\n");
+                printf("********************************************************\n");
+                printf("Enter your choice (1-4): ");
+                scanf("%d", &choice);
+
+                // Clear the newline character left by scanf from the input buffer
+                while (getchar() != '\n')
+                    ;
+
+                switch (choice)
+                {
+                case 1: // C (Serial)
+                    snprintf(command, sizeof(command), "../src/intensity_normalization/c_intensity \"%s\"", image_path);
+                    printf("Executing C (Serial) Intensity Normalization...\n");
+                    execute_command(command);
+                    break;
+
+                case 2: // CUDA (GPU-Parallel)
+                    snprintf(command, sizeof(command), "../src/intensity_normalization/a.out \"%s\"", image_path);
+                    printf("Executing CUDA (GPU-Parallel) Intensity Normalization...\n");
+                    execute_command(command);
+                    break;
+
+                case 3: // OpenMP (Multi-Core)
+                    snprintf(command, sizeof(command), "../src/intensity_normalization/openmp_intensity \"%s\"", image_path);
+                    printf("Executing OpenMP (Multi-Core) Intensity Normalization...\n");
+                    execute_command(command);
+                    break;
+
+                case 4:     // Back to Functionalities Menu
+                    return; // Exit the function to go back to the functionalities menu
+
+                default:
+                    printf("Invalid choice. Please select a valid option (1-4).\n");
+                    break;
+                }
+
+                printf("Intensity Normalization processing completed successfully!\n");
+                printf("Press Enter to return to the Intensity Normalization menu...");
+                getchar(); // Wait for the user to press Enter before showing the menu again
+            }
             break;
         case 3: // Edge Detection
             clear_screen();
@@ -223,60 +267,60 @@ void start_image_processing()
             printf("Edge Detection completed successfully!\n");
             break;
 
-            case 4: // histogram_equalization
-                while (1)
+        case 4: // histogram_equalization
+            while (1)
+            {
+                clear_screen();
+                display_title();
+                printf("Current Image Path: %s\n", image_path);
+                printf("-------------------------------------------\n");
+                printf("Select Histogram Equalization Implementation:\n");
+                printf("1. C (Serial)\n");
+                printf("2. CUDA (GPU-Parallel)\n");
+                printf("3. OpenMP (Multi-Core)\n");
+                printf("4. Back to Functionalities Menu\n");
+                printf("********************************************************\n");
+                printf("Enter your choice (1-4): ");
+                scanf("%d", &choice);
+
+                // Clear the newline character left by scanf from the input buffer
+                while (getchar() != '\n')
+                    ;
+
+                switch (choice)
                 {
-                    clear_screen();
-                    display_title();
-                    printf("Current Image Path: %s\n", image_path);
-                    printf("-------------------------------------------\n");
-                    printf("Select Histogram Equalization Implementation:\n");
-                    printf("1. C (Serial)\n");
-                    printf("2. CUDA (GPU-Parallel)\n");
-                    printf("3. OpenMP (Multi-Core)\n");
-                    printf("4. Back to Functionalities Menu\n");
-                    printf("********************************************************\n");
-                    printf("Enter your choice (1-4): ");
-                    scanf("%d", &choice);
+                case 1: // C (Serial)
+                    snprintf(command, sizeof(command), "../src/histrogram/c/c_histrogram \"%s\"", image_path);
+                    printf("Executing C (Serial) Histogram Equalization...\n");
+                    execute_command(command);
+                    break;
 
-                    // Clear the newline character left by scanf from the input buffer
-                    while (getchar() != '\n')
-                        ;
+                case 2: // CUDA (GPU-Parallel)
+                    snprintf(command, sizeof(command), "../src/histogram_equalization/cuda/histogram_equalization_cuda \"%s\"", image_path);
+                    printf("Executing CUDA (GPU-Parallel) Histogram Equalization...\n");
+                    execute_command(command);
+                    break;
 
-                    switch (choice)
-                    {
-                    case 1: // C (Serial)
-                        snprintf(command, sizeof(command), "../src/histrogram/c/c_histrogram \"%s\"", image_path);
-                        printf("Executing C (Serial) Histogram Equalization...\n");
-                        execute_command(command);
-                        break;
+                case 3: // OpenMP (Multi-Core)
+                    snprintf(command, sizeof(command), "../src/histrogram/openmp/openmp_histrogram \"%s\"", image_path);
+                    printf("Executing OpenMP (Multi-Core) Histogram Equalization...\n");
+                    execute_command(command);
+                    break;
 
-                    case 2: // CUDA (GPU-Parallel)
-                        snprintf(command, sizeof(command), "../src/histogram_equalization/cuda/histogram_equalization_cuda \"%s\"", image_path);
-                        printf("Executing CUDA (GPU-Parallel) Histogram Equalization...\n");
-                        execute_command(command);
-                        break;
+                case 4:     // Back to Functionalities Menu
+                    return; // Exit the function to go back to the functionalities menu
 
-                    case 3: // OpenMP (Multi-Core)
-                        snprintf(command, sizeof(command), "../src/histrogram/openmp/openmp_histrogram \"%s\"", image_path);
-                        printf("Executing OpenMP (Multi-Core) Histogram Equalization...\n");
-                        execute_command(command);
-                        break;
-
-                    case 4:     // Back to Functionalities Menu
-                        return; // Exit the function to go back to the functionalities menu
-
-                    default:
-                        printf("Invalid choice. Please select a valid option (1-4).\n");
-                        break;
-                    }
-
-                    printf("Histogram Equalization processing completed successfully!\n");
-                    printf("Press Enter to return to the Histogram Equalization menu...");
-                    getchar(); // Wait for the user to press Enter before showing the menu again
+                default:
+                    printf("Invalid choice. Please select a valid option (1-4).\n");
+                    break;
                 }
 
-                break;
+                printf("Histogram Equalization processing completed successfully!\n");
+                printf("Press Enter to return to the Histogram Equalization menu...");
+                getchar(); // Wait for the user to press Enter before showing the menu again
+            }
+
+            break;
         case 5: // Gaussian Blur
             while (1)
             {
