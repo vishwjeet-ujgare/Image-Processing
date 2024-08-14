@@ -1,0 +1,9 @@
+c
+gcc -o openmp_edge_detection openmp_edge_detection.c -lm -ljpeg
+
+
+openmp
+gcc -fopenmp -o openmp_edge_detection openmp_edge_detection.c -lm -ljpeg
+
+cuda
+nvcc file_name 
