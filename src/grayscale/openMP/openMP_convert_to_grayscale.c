@@ -6,7 +6,7 @@
 #include <time.h> // For measuring time
 
 #define MAX_PATH 2000
-#define DEFAULT_OUTPUT_DIR "/home/hpcap/Desktop/image_process/Image-Processing/data/output/cuda_processed_img/grayscale/"
+#define DEFAULT_OUTPUT_DIR "../data/output/grascale_conversion"
 
 // Function to extract base filename from the input path
 void extractBaseFileName(const char *inputFilePath, char *baseFileName, size_t baseFileNameSize)

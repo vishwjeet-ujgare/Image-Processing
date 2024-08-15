@@ -19,8 +19,18 @@ void execute_command(const char *command)
     }
     else
     {
-        printf("Histogram Equalization completed successfully!\n");
+        printf("execuation completed successfully!\n");
     }
+}
+
+void display_execution_options()
+{
+    printf("1. C (Serial)\n");
+    printf("2. CUDA (GPU-Parallel)\n");
+    printf("3. OpenMP (Multi-Core)\n");
+    printf("4. Back to Functionalities Menu\n");
+    printf("********************************************************\n");
+    printf("Enter your choice (1-4): ");
 }
 
 void start_image_processing()
@@ -327,14 +337,7 @@ void start_image_processing()
                 clear_screen();
                 display_title();
                 printf("Current Image Path: %s\n", image_path);
-                printf("-----------------------------------\n");
-                printf("Select Gaussian Blur Implementation:\n");
-                printf("1. C (Serial)\n");
-                printf("2. CUDA (GPU-Parallel)\n");
-                printf("3. OpenMP (Multi-Core)\n");
-                printf("4. Back to Functionalities Menu\n");
-                printf("********************************************************\n");
-                printf("Enter your choice (1-4): ");
+                display_execution_options();
                 scanf("%d", &choice);
 
                 // Clear the newline character left by scanf from the input buffer
@@ -376,13 +379,51 @@ void start_image_processing()
             break;
 
         case 6:
-            clear_screen();
-            display_title();
-            printf("Current Image Path: %s\n", image_path);
-            printf("Processing Denoising...\n");
-            // Call the Denoising function with the image path
-            // denoise_image(image_path); // Ensure this function matches your implementation
-            printf("Denoising completed successfully!\n");
+
+            while (1)
+            {
+                clear_screen();
+                display_title();
+               
+                printf("-------------------------------------------\n");
+                printf("Select Denoising Equalization Implementation:\n");
+                printf("1. C (Serial)\n");
+                printf("2. CUDA (GPU-Parallel)\n");
+                printf("3. OpenMP (Multi-Core)\n");
+                printf("4. Back to Functionalities Menu\n");
+                printf("********************************************************\n");
+                scanf("%d", &choice);
+
+                // Clear the newline character left by scanf from the input buffer
+                while (getchar() != '\n')
+                    ;
+
+                switch (choice)
+                {
+                case 1: // C (Serial)
+                    snprintf(command, sizeof(command), "../src/denosing/c/denoising \"%s\"", image_path);
+                    printf("Executing C (Serial) Denosing Blur...\n");
+                    execute_command(command);
+                    break;
+
+                case 2: // CUDA (GPU-Parallel)
+                    printf("\n As of know execution with cuda functinality is not available\n");
+                    break;
+
+                case 3: // OpenMP (Multi-Core)
+                    printf("\n As of now execution with openMP functinality is not available\n");
+                    break;
+
+                case 4: // Back to Functionalities Menu
+                    return;
+
+                default:
+                    printf("Invalid choice. Please select a valid option (1-4).\n");
+                    break;
+                }
+
+                getchar(); // Wait for the user to press Enter before showing the menu again
+            }
             break;
         case 7:
             select_another_image = 1; // Set flag to select another image

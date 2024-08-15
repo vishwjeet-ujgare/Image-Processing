@@ -1,9 +1,12 @@
 /home/hpcap/Desktop/image_process/Image-Processing/data/input/image1.jpg
 
 
-
-
 For OpenMp
 gcc -o convert_to_grayscale convert_to_grayscale.c -ljpeg -fopenmp
 
+for main main_script
 gcc main_script.c about.c functionalities.c title.c image_processing_options.c -o main_script
+
+
+img input path 
+/home/hpcap/Desktop/Image_Processing/Image-Processing/data/input/image1.jpg

@@ -1,2 +1,8 @@
 sudo apt-get update
 sudo apt-get install libjpeg62
+
+
+gcc -o sequenctial_gaussian_blur sequenctial_gaussian_blur.c -ljpeg -lm
+
+
+gcc -o gaussian_blur_openmp gaussian_blur_openmp.c -ljpeg -fopenmp -lm

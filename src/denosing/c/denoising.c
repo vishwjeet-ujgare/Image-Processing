@@ -4,6 +4,7 @@
 #include <math.h>
 #include <float.h>
 #include <string.h>
+#include <time.h>
 
 #define PATCH_SIZE 7
 #define SEARCH_RADIUS 21
@@ -172,13 +173,21 @@ int main() {
     int width, height;
     unsigned char *input_image, *output_image;
 
-    read_image("/home/hpcap/Desktop/image_process/Image-Processing/data/input/100080unimgNoise70.jpg", &input_image, &width, &height);
+      clock_t start_time = clock();
+
+    read_image("../data/input/default_img.jpg", &input_image, &width, &height);
 
     output_image = (unsigned char *)malloc(width * height * sizeof(unsigned char));
 
     denoise_image(input_image, output_image, width, height, PATCH_SIZE, SEARCH_RADIUS, H);
 
-    write_image("/home/hpcap/Desktop/image_process/Image-Processing/data/output/100080unimgNoise70.jpg", output_image, width, height);
+    write_image("../data/output/denosing/default_denoising_img.jpg", output_image, width, height);
+
+
+
+    clock_t end_time = clock();
+    double elapsed_time = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+    printf("Elapsed time: %.2f seconds\n", elapsed_time); 
 
     free(input_image);
     free(output_image);

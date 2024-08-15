@@ -177,7 +177,7 @@ int main() {
 
     free(input_image);
 
-    write_jpeg_file("/home/hpcap/Desktop/image_process/Image-Processing/data/output/edge_detection/openmp_output.jpg", edge_image, width, height, 1, 100);
+    write_jpeg_file("../data/output/edge_detection/openmp_edege_detection.jpg", edge_image, width, height, 1, 100);
     free(edge_image);
 
     return 0;

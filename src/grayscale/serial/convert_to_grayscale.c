@@ -130,11 +130,12 @@ int main(int argc, char *argv[])
     // Append "_serial.jpg" to the base name
     strcat(baseName, "_serial.jpg");
 
+
     // Use default output path if the user does not provide one
     if (strlen(outputFilePath) == 0)
     {
         snprintf(outputFilePath, sizeof(outputFilePath),
-                 "/home/hpcap/Desktop/image_process/Image-Processing/data/output/cuda_processed_img/grayscale/c/%s", baseName);
+                 "../data/output/grascale_conversion/%s", baseName);
     }
     else if (outputFilePath[strlen(outputFilePath) - 1] == '/')
     {
@@ -145,6 +146,7 @@ int main(int argc, char *argv[])
     // Ensure the path does not exceed buffer size
     if (strlen(outputFilePath) >= MAX_PATH_LENGTH)
     {
+        printf("\n----------------------------------------------------------\n");
         fprintf(stderr, "Error: Output file path is too long.\n");
         return EXIT_FAILURE;
     }
