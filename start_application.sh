@@ -19,6 +19,9 @@ fi
 # Navigate to the target directory
 cd "$TARGET_DIR" || { echo "Failed to change directory to $TARGET_DIR"; exit 1; }
 
+# Set environment variables (if needed)
+# export LD_LIBRARY_PATH="$SCRIPT_DIR/lib:$LD_LIBRARY_PATH"
+
 # Execute the 'main_script'
 echo "Executing ./main_script"
 ./main_script
